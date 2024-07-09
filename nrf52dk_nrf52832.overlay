@@ -1,0 +1,148 @@
+/*
+ * Copyright (c) 2021 Nordic Semiconductor ASA
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+
+//  / {
+// 	chosen {
+// 		zephyr,display = &st7735s_st7735s_128x160;
+// 	};
+// };
+
+// &arduino_spi {
+// 	status = "okay";
+// 	cs-gpios = <&arduino_header 16 GPIO_ACTIVE_LOW>;    /* D10 */
+
+// 	st7735s_st7735s_128x160: st7735r@0 {
+// 		compatible = "sitronix,st7735r";
+// 		spi-max-frequency = <20000000>;
+// 		reg = <0>;
+// 		// lcd-logic-power-gpios = <&arduino_header 13 GPIO_ACTIVE_HIGH>;    /* D7 */
+// 		// lcd-backlight-power-gpios = <&arduino_header 10 GPIO_ACTIVE_HIGH>;    /* D4 */
+// 		cmd-data-gpios = <&arduino_header 15 GPIO_ACTIVE_LOW>;    /* D9 */
+// 		reset-gpios = <&arduino_header 14 GPIO_ACTIVE_LOW>;    /* D8 */
+// 		width = <128>;
+// 		height = <160>;
+// 		x-offset = <0>;
+// 		y-offset = <0>;
+// 		madctl = <0xc0>;
+// 		colmod = <0x55>;
+// 		caset = [ 00 00 00 4F  ];
+// 		raset = [ 00 00 00 9F  ];
+// 		vmctr1 = <0x0e>;
+// 		invctr = <0x07>;
+// 		pwctr1 = [ a2 02 84  ];
+// 		pwctr2 = [ c5  ];
+// 		pwctr3 = [ 0a 00  ];
+// 		pwctr4 = [ 8a 2a  ];
+// 		pwctr5 = [ 8a ee  ];
+// 		frmctr1 = [ 01 2c 2d  ];
+// 		frmctr2 = [ 01 2c 2d  ];
+// 		frmctr3 = [ 01 2c 2d 01 2c 2d  ];
+// 		gamctrp1 = [ 02 1c 07 12 37 32 29 2d 29 25 2b 39 00 01 03 10  ];
+// 		gamctrn1 = [ 03 1d 07 06 2e 2c 29 2d 2e 2e 37 3f 00 00 02 10  ];
+// 	};
+// };
+
+// &pinctrl {
+// 	i2c0_default: i2c0_default {
+// 		group1 {
+// 			psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
+// 					<NRF_PSEL(TWIM_SCL, 0, 27)>;
+// 		};
+// 	};
+
+// 	i2c0_sleep: i2c0_sleep {
+// 		group1 {
+// 			psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
+// 					<NRF_PSEL(TWIM_SCL, 0, 27)>;
+// 			low-power-enable;
+// 		};
+// 	};
+
+// };
+
+// &i2c0 {
+// 	compatible = "nordic,nrf-twim";
+// 	status = "okay";
+
+// 	clock-frequency = <I2C_BITRATE_STANDARD>;
+
+// 	sht4x@44 {
+// 		status = "okay";
+// 		compatible = "sensirion,sht4x";
+// 		reg = <0x44>;
+// 		label = "SHT4X";
+// 		repeatability = <2>;
+// 	};
+// 	mysensor: mysensor@39 {
+// 		status = "okay";
+// 		compatible = "i2c-device";
+// 		reg = <0x39>;
+
+// 		label = "STTS751";
+// 		repeatability = <2>;
+
+// 	};
+// 	vcnl4040@60 {
+// 		status = "okay";
+// 		compatible = "vishay,vcnl4040";
+// 		reg = <0x60>;
+// 		led-current = <200>;
+// 		led-duty-cycle = <320>;
+// 		label = "VCNL";
+// 		status = "okay";
+// 		// repeatability = <2>;
+// 	};
+
+
+// };
+// / {
+// 	zephyr,user {
+// 		io-channels = <&adc 4>;
+// 	};
+// };
+
+
+
+// &rng_hci {
+// 	status = "okay";
+// };
+
+
+////////////////////////////////////////////////
+
+&arduino_i2c {
+    status = "okay";
+    compatible = "nordic,nrf-twi";
+    
+	ssd1306_ssd1306_128x64_I2C: ssd1306@3c {
+        compatible = "solomon,ssd1306fb";
+		reg = <0x3c>;
+        label = "SSD1306";
+		width = <130>;
+		height = <64>;
+		segment-offset = <0>;
+		page-offset = <0>;
+		display-offset = <0>;
+		multiplex-ratio = <63>;
+		segment-remap;
+		com-invdir;
+		prechargep = <0x22>;
+	};
+};
+
+
+&uart0 {
+	compatible = "nordic,nrf-uarte";
+	status = "okay";
+	label = "UART_0";
+	current-speed = < 9600 >;
+  //   tx-pin = < 9 >;
+  //   rx-pin = < 10 >;
+  //   rts-pin = < 11 >;
+  //   cts-pin = < 12 >;
+  };
+
