@@ -123,7 +123,8 @@ int main(void)
 	while (1) {
 		send_uart_command(query_command, sizeof(query_command)); // Send query command
 
-		int ret = receive_uart_data(rx_buf, sizeof(rx_buf), K_MSEC(50));
+		uint32_t ret = receive_uart_data(rx_buf, sizeof(rx_buf), K_MSEC(100));
+        char text[] = {};
 		if (ret == 0) {
 			// Check for the correct frame header
 			if (rx_buf[0] == 0x5A && rx_buf[1] == 0x5A) {
@@ -132,23 +133,25 @@ int main(void)
 					       (rx_buf[6] << 8) | rx_buf[7];
 				uint32_t luxValue = lux / 100.0;
 
-				printf("Light intensity: %d\n", luxValue);
-				char text[20];
+				printf("\rLight intensity: %d\n", luxValue);
+				
 				snprintf(text, 128, "%u", luxValue);
-				uint16_t text_width = 130;
+				uint16_t text_width = font_width;
 				printk("Text width : %d\n", text_width);
 				uint16_t text_height = font_height;
 				printk("Text Height : %d\n", text_height);
 
 				// Adjust starting position to display text at the bottom
-				uint16_t start_x = (display_width - text_width) / 2;
+				uint16_t start_x = (display_width) / 2 - text_width;
 				uint16_t start_y = (display_height - text_height) / 2;
+
+                cfb_framebuffer_clear(dev, true);
 
 				if (cfb_print(dev, text, start_x, start_y)) {
 					printk("Failed to print string\n");
 					return;
 				}
-
+                
 				cfb_framebuffer_finalize(dev);
 				k_msleep(1000);
 			} else {
@@ -158,10 +161,10 @@ int main(void)
 		} else if (ret == -ETIMEDOUT) {
 			printk("UART receive timeout\n");
 		} else {
-			printk("UART receive error: %d\n", ret);
+			// printk("UART receive error: %d\n", ret);
 		}
-
-		k_msleep(100); // Small delay before sending the next query
+        
+		// k_msleep(200); // Small delay before sending the next query
 	}
 
 	return 0;
